@@ -8,10 +8,13 @@ This API is meant to supoort the Android application present in this repository 
 The database is MySQL based, MariaDB, and may be installed under Linux OS as show below.
 
 * Yum/Dnf Based
+
     ```
     dnf install mariadb mariadb-server
     ```
+    
 * Debian Based
+
     ```
     apt-get install mariadb mariadb-server
     ```
