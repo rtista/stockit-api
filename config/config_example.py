@@ -32,7 +32,7 @@ class DevelopmentConfig(Config):
         'dbname': 'inventory_app'
     }
     
-    # Token lifetime is 1 hour
+    # Token lifetime is 3 hours
     TOKEN_LIFE = 10800
 
 
