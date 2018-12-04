@@ -13,6 +13,7 @@ The database is MySQL based, MariaDB, and may be installed under Linux OS as sho
     ```shell
     dnf install mariadb mariadb-server
     ```
+    
 * Debian Based
 
     ```shell
