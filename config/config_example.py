@@ -31,6 +31,9 @@ class DevelopmentConfig(Config):
         'port': 3306,
         'dbname': 'inventory_app'
     }
+    
+    # Token lifetime is 1 hour
+    TOKEN_LIFE = 10800
 
 
 class StagingConfig(Config):
@@ -39,6 +42,9 @@ class StagingConfig(Config):
     '''
     # Debugging Mode
     DEBUG = True
+    
+    # Token lifetime is 2 hours
+    TOKEN_LIFE = 7200
 
 
 class ProductionConfig(Config):
@@ -47,3 +53,6 @@ class ProductionConfig(Config):
     '''
     # Debugging Mode
     DEBUG = False
+    
+    # Token lifetime is 1 hour
+    TOKEN_LIFE = 3600
