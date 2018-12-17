@@ -10,4 +10,4 @@ class AuthResource:
             'methods': ['token']
         }
 
-        resp.status_code = falcon.HTTP_200
+        resp.status = falcon.HTTP_200
