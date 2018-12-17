@@ -1,6 +1,9 @@
 # Imports
 from models import User, AuthToken
 
+# Batteries
+from time import time
+
 # Third party imports
 import falcon
 from secrets import token_hex
@@ -16,44 +19,60 @@ class AuthTokenResource:
         username = req.media.get('username')
         password = req.media.get('password')
 
+        print('Got request: {}:{}'.format(username, password))
+
         # Check if parameters not empty
         if None in [username, password]:
-            resp.media = {'error': 'Invalid Parameters'}
-            resp.status_code = falcon.HTTP_400
-            return
+            raise falcon.HTTPBadRequest('Bad Request', 'Invalid Parameters')
 
         user = self.db_conn.query(User).filter_by(username=username).first()
 
         # If user does not exist
         if user == None:
-            resp.media = {'error': 'Wrong credentials'}
-            resp.status_code = falcon.HTTP_401
-            return
+            raise falcon.HTTPUnauthorized('Unauthorized', 'Wrong Credentials')
 
-        # If passowrd does not match
+        # If password does not match
         if not pbkdf2_sha256.verify(password, user.password):
-            resp.media = {'error': 'Wrong credentials'}
-            resp.status_code = falcon.HTTP_401
-            return
+            raise falcon.HTTPUnauthorized('Unauthorized', 'Wrong Credentials')
 
-        # Create user token (32 bits length)
-        cond = False
+        # Get user bearer token
+        token = self.db_conn.query(AuthToken).filter_by(user_id=user.user_id).first()
 
-        # Retry while token has not been inserted
-        while not cond:
-            token = AuthToken(user_id=user.user_id, auth_type='bearer', token=token_hex(16))
+        # Check if user does not have token
+        if token == None:
 
-            try:
-                self.db_conn.add(token)
-                self.db_conn.commit()
-                cond = True
+            # Create user token (32 bits length)
+            cond = False
 
-            except Exception:
-                pass
+            # Retry while token has not been inserted
+            while not cond:
+                token = AuthToken(user_id=user.user_id, auth_type='bearer', token=token_hex(16))
+
+                try:
+                    self.db_conn.add(token)
+                    self.db_conn.commit()
+                    cond = True
+
+                except Exception:
+                    pass
+
+        # If user has token but it has expired
+        elif token.expires_at < time():
+            
+            while not cond:
+                token.token = token_hex(16)
+
+                try:
+                    self.db_conn.add(token)
+                    self.db_conn.commit()
+                    cond = True
+
+                except Exception:
+                    pass
 
         resp.media = {
             'auth_type': token.auth_type,
             'token': token.token,
             'expires_on': token.expires_at
         }
-        resp.status_code = falcon.HTTP_201
+        resp.status = falcon.HTTP_201
