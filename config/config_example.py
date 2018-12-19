@@ -18,7 +18,7 @@ class DevelopmentConfig(Config):
 
     # Server listening config
     SERVER = {
-        'url': '127.0.0.1',
+        'url': '0.0.0.0',
         'port': 8000
     }
 
