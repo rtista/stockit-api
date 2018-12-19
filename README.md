@@ -53,6 +53,7 @@ python3 run.py
 The database is MySQL based, MariaDB, and may be installed under Linux OS as show below.
 
 1) Download MariaDB installer from their website
+
     * 32-bit: <https://downloads.mariadb.org/interstitial/mariadb-10.3.11/win32-packages/mariadb-10.3.11-win32.msi/from/http%3A//mirrors.up.pt/pub/mariadb/>
     * 64-bit: <https://downloads.mariadb.org/interstitial/mariadb-10.3.11/winx64-packages/mariadb-10.3.11-winx64.msi/from/http%3A//mirrors.up.pt/pub/mariadb/>
 
@@ -77,6 +78,7 @@ CREATE DATABASE inventory_app;
 For the API you'll need to install Python 3.6:
 
 1) Download Python 3.6 from the following URL:
+
     * 32-bit: <https://www.python.org/ftp/python/3.6.7/python-3.6.7.exe>
     * 64-bit: <https://www.python.org/ftp/python/3.6.7/python-3.6.7-amd64.exe>
 
