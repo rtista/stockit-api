@@ -6,9 +6,17 @@ from middleware import MySQLSessionManager
 from config import AppConfig
 from models import Base
 
+# Batteries
+import os
+
 # Third party imports
 import falcon
-import bjoern
+
+# If running on windows use waitress
+if os.name == 'nt':
+    import waitress
+else:
+    import bjoern
 
 from sqlalchemy import create_engine
 from sqlalchemy.orm import scoped_session
@@ -56,6 +64,13 @@ for route in ROUTES:
 # Serve application
 if __name__ == '__main__':
 
-    print('Starting bjoern server on {}:{}'.format(AppConfig.SERVER['url'], AppConfig.SERVER['port']))
-    bjoern.listen(api, AppConfig.SERVER['url'], AppConfig.SERVER['port'])
-    bjoern.run()
+    # If running on windows use waitress
+    if os.name == 'nt':
+
+        print('Starting waitress server on {}:{}'.format(AppConfig.SERVER['url'], AppConfig.SERVER['port']))
+        waitress.serve(api, host=AppConfig.SERVER['url'], port=AppConfig.SERVER['port'])
+
+    else:
+        print('Starting bjoern server on {}:{}'.format(AppConfig.SERVER['url'], AppConfig.SERVER['port']))
+        bjoern.listen(api, AppConfig.SERVER['url'], AppConfig.SERVER['port'])
+        bjoern.run()
