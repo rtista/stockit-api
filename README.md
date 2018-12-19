@@ -85,6 +85,7 @@ For the API you'll need to install Python 3.6:
 3) Finish the installation.
 
 4) Download the following version of mysqlclient pip package from <https://www.lfd.uci.edu/~gohlke/pythonlibs/#mysqlclient> and choose the option which fits your computer's architecture:
+
     * 32-bit: mysqlclient‑1.3.13‑cp36‑cp36m‑win32.whl
     * 64-bit: mysqlclient‑1.3.13‑cp36‑cp36m‑win_amd64.whl
 
