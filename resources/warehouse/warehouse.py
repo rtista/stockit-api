@@ -69,13 +69,15 @@ class WarehouseResource:
         # Read warehouse details
         name = req.media.get('name')
         description = req.media.get('description')
+        latitude = req.media.get('latitude')
+        longitude = req.media.get('longitude')
 
         # Check if parameters not empty
         if None in [name, description]:
             raise falcon.HTTPBadRequest('Bad Request', 'Invalid Parameters')
 
         # Create warehouse
-        warehouse = Warehouse(name=name, description=description)
+        warehouse = Warehouse(name=name, description=description, latitude=latitude, longitude=longitude)
 
         self.db_conn.add(warehouse)
 
