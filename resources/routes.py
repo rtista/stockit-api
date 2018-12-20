@@ -2,7 +2,7 @@
 from .auth import AuthResource, AuthTokenResource
 # from .account import AccountResource
 from .user import UserResource
-# from .warehouse import WarehouseResource
+from .warehouse import WarehouseResource
 # from .item import ItemResource
 
 
@@ -21,7 +21,7 @@ ROUTES = {
     '/user': UserResource,
 
     # Warehouse Module
-    # '/warehouse': WarehouseResource,
+    '/warehouse': WarehouseResource,
 
     # Item Module
     # '/item': ItemResource,
