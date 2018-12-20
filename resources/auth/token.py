@@ -1,5 +1,6 @@
 # Imports
 from models import User, AuthToken
+from config import AppConfig
 
 # Batteries
 from time import time
@@ -18,8 +19,6 @@ class AuthTokenResource:
         """
         username = req.media.get('username')
         password = req.media.get('password')
-
-        print('Got request: {}:{}'.format(username, password))
 
         # Check if parameters not empty
         if None in [username, password]:
@@ -58,9 +57,13 @@ class AuthTokenResource:
 
         # If user has token but it has expired
         elif token.expires_at < time():
+
+            # Create user token (32 bits length)
+            cond = False
             
             while not cond:
                 token.token = token_hex(16)
+                token.expires_at = time() + AppConfig.TOKEN_LIFE
 
                 try:
                     self.db_conn.add(token)
