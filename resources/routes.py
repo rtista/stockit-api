@@ -22,6 +22,7 @@ ROUTES = {
 
     # Warehouse Module
     '/warehouse': WarehouseResource,
+    '/warehouse/{warehouse_id:int}': WarehouseResource,
 
     # Item Module
     # '/item': ItemResource,
