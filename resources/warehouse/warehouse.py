@@ -1,5 +1,5 @@
 # Imports
-from models import Warehouse, UserWarehouse, AuthToken
+from models import Warehouse, UserWarehouse
 from hooks import Authorize
 
 # Batteries
@@ -7,7 +7,6 @@ from time import time
 
 # Third party imports
 import falcon
-from passlib.hash import pbkdf2_sha256
 from sqlalchemy.exc import SQLAlchemyError, NoReferenceError
 
 @falcon.before(Authorize())
@@ -26,7 +25,11 @@ class WarehouseResource:
         warehouses = []
 
         for warehouse in self.db_conn.query(Warehouse).filter(UserWarehouse.user_id == self.user_id).join(UserWarehouse, UserWarehouse.warehouse_id == Warehouse.warehouse_id):
-            warehouses.append({'name': warehouse.name, 'description': warehouse.description, 'latitude': warehouse.latitude, 'longitude': warehouse.longitude})
+            warehouses.append({
+                'id': warehouse.warehouse_id,
+                'name': warehouse.name, 'description': warehouse.description, 
+                'latitude': warehouse.latitude, 'longitude': warehouse.longitude
+            })
 
         resp.media = {'warehouses': warehouses}
         resp.status = falcon.HTTP_200
