@@ -91,10 +91,22 @@ For the API you'll need to install Python 3.6:
     * 32-bit: mysqlclient‑1.3.13‑cp36‑cp36m‑win32.whl
     * 64-bit: mysqlclient‑1.3.13‑cp36‑cp36m‑win_amd64.whl
 
+Proceed to install the package with PIP:
+
+```shell
+pip install mysqlclient‑1.3.13‑cp36‑cp36m‑win_amd64.whl
+```
+
 The API is fairly easy to deploy, open up CMD and change into the projects api/ directory and install all the requirements in the requirements.txt file with the following command:
 
 ```shell
-pip install -r requirements.txt
+pip install -r requirements_win.txt
+```
+
+A default configuration file is placed in the config directory, you must copy it into a 'config.py' in the same directory and overried the default values if you wish to:
+
+```shell
+cp config/config_example.py config/config.py
 ```
 
 After this, execute the API with the following command:
