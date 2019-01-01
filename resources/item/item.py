@@ -35,7 +35,8 @@ class ItemResource:
                 'id': item.item_id,
                 'name': item.name, 'description': item.description, 
                 'quantity': item.quantity, 'section': item.section,
-                'barcode': item.barcode, 'user_id': item.user_id
+                'barcode': item.barcode, 'user_id': item.user_id,
+                'min_quantity': item.min_quantity
             })
 
         resp.media = {'items': items}
@@ -63,6 +64,7 @@ class ItemResource:
         quantity = req.media.get('quantity')
         barcode = req.media.get('barcode')
         section = req.media.get('section')
+        min_quantity = req.media.get('min_quantity')
 
         # Check if parameters not empty
         if None in [name, description, quantity]:
@@ -71,7 +73,7 @@ class ItemResource:
         # Create item
         item = Item(name=name, description=description, quantity=quantity, 
                     section=section, barcode=barcode, warehouse_id=warehouse_id,
-                    user_id=self.user_id)
+                    user_id=self.user_id, min_quantity=min_quantity)
 
         self.db_conn.add(item)
 
@@ -111,6 +113,7 @@ class ItemResource:
         quantity = req.media.get('quantity')
         barcode = req.media.get('barcode')
         section = req.media.get('section')
+        min_quantity = req.media.get('min_quantity')
 
         # If all details read are None
         if not any([name, description, quantity, barcode, section]):
@@ -138,6 +141,9 @@ class ItemResource:
 
         if barcode != None:
             item.barcode = barcode
+
+        if min_quantity != None:
+            item.min_quantity = min_quantity
 
         # Add transaction
         self.db_conn.add(item)

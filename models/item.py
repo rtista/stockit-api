@@ -20,4 +20,5 @@ class Item(Base):
     quantity = Column('quantity', Integer, default=0)
     barcode = Column('barcode', String(64), index=True, nullable=True)
     section = Column('section', String(32), nullable=True)
+    min_quantity = Column('min_quantity', Integer, default=0)
     created_at = Column('created_at', Integer, default=int(time()))
