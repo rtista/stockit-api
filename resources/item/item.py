@@ -36,6 +36,10 @@ class ItemResource:
         else:
             res = self.db_conn.query(Item).filter_by(warehouse_id=warehouse_id)
 
+        # Return 404 if barcode is non-existent
+        if res == None or len(res) == 0:
+            raise falcon.HTTPNotFound(title='Not Found', description='The requested barcode does not exist.')
+
         items = []
 
         # For each item in the warehouse
