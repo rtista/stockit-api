@@ -27,10 +27,19 @@ class ItemResource:
         if self.db_conn.query(UserWarehouse).filter_by(user_id=self.user_id, warehouse_id=warehouse_id).first() == None:
             raise falcon.HTTPNotFound(title='Not Found', description='The requested warehouse does not exist.')
 
+        # Query database
+        # If request code exists add barcode to query
+        if req.params['barcode']:
+            
+            res = self.db_conn.query(Item).filter_by(warehouse_id=warehouse_id, barcode=req.params['barcode'])
+
+        else:
+            res = self.db_conn.query(Item).filter_by(warehouse_id=warehouse_id)
+
         items = []
 
         # For each item in the warehouse
-        for item in self.db_conn.query(Item).filter_by(warehouse_id=warehouse_id):
+        for item in res:
             items.append({
                 'id': item.item_id,
                 'name': item.name, 'description': item.description, 
@@ -41,7 +50,6 @@ class ItemResource:
 
         resp.media = {'items': items}
         resp.status = falcon.HTTP_200
-
 
     def on_post(self, req, resp, warehouse_id):
         """
