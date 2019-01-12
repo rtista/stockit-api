@@ -29,16 +29,16 @@ class ItemResource:
 
         # Query database
         # If request code exists add barcode to query
-        if req.params['barcode']:
+        if 'barcode' in req.params:
             
             res = self.db_conn.query(Item).filter_by(warehouse_id=warehouse_id, barcode=req.params['barcode'])
 
+            # Return 404 if barcode is non-existent
+            if res.count() == 0:
+                raise falcon.HTTPNotFound(title='Not Found', description='The requested barcode does not exist.')
+
         else:
             res = self.db_conn.query(Item).filter_by(warehouse_id=warehouse_id)
-
-        # Return 404 if barcode is non-existent
-        if res == None or len(res) == 0:
-            raise falcon.HTTPNotFound(title='Not Found', description='The requested barcode does not exist.')
 
         items = []
 
