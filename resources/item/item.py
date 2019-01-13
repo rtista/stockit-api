@@ -47,9 +47,9 @@ class ItemResource:
             items.append({
                 'id': item.item_id,
                 'name': item.name, 'description': item.description, 
-                'quantity': item.quantity, 'section': item.section,
-                'barcode': item.barcode, 'user_id': item.user_id,
-                'min_quantity': item.min_quantity
+                'barcode': item.barcode, 'available': item.available,
+                'allocated': item.allocated, 'alert': item.alert,
+                'user_id': item.user_id
             })
 
         resp.media = {'items': items}
@@ -73,19 +73,19 @@ class ItemResource:
         # Read warehouse details
         name = req.media.get('name')
         description = req.media.get('description')
-        quantity = req.media.get('quantity')
         barcode = req.media.get('barcode')
-        section = req.media.get('section')
-        min_quantity = req.media.get('min_quantity')
+        available = req.media.get('available')
+        allocated = req.media.get('allocated')
+        alert = req.media.get('alert')
 
         # Check if parameters not empty
-        if None in [name, description, quantity]:
+        if None in [name, description, available]:
             raise falcon.HTTPBadRequest('Bad Request', 'Missing name, description or quantity.')
 
         # Create item
-        item = Item(name=name, description=description, quantity=quantity, 
-                    section=section, barcode=barcode, warehouse_id=warehouse_id,
-                    user_id=self.user_id, min_quantity=min_quantity)
+        item = Item(name=name, description=description, barcode=barcode,
+                    available=available, allocated=allocated, alert=alert,
+                    warehouse_id=warehouse_id, user_id=self.user_id)
 
         self.db_conn.add(item)
 
@@ -122,13 +122,13 @@ class ItemResource:
         # Read warehouse details
         name = req.media.get('name')
         description = req.media.get('description')
-        quantity = req.media.get('quantity')
         barcode = req.media.get('barcode')
-        section = req.media.get('section')
-        min_quantity = req.media.get('min_quantity')
+        available = req.media.get('available')
+        allocated = req.media.get('allocated')
+        alert = req.media.get('alert')
 
         # If all details read are None
-        if not any([name, description, quantity, barcode, section]):
+        if not any([name, description, barcode, available, allocated, alert]):
             raise falcon.HTTPBadRequest('Bad Request', 'No item parameters in request body.')
 
         # Get the item from the warehouse
@@ -145,17 +145,17 @@ class ItemResource:
         if description != None:
             item.description = description
 
-        if quantity != None:
-            item.quantity = quantity
-
-        if section != None:
-            item.section = section
-
         if barcode != None:
             item.barcode = barcode
 
-        if min_quantity != None:
-            item.min_quantity = min_quantity
+        if available != None:
+            item.available = available
+
+        if allocated != None:
+            item.allocated = allocated
+
+        if alert != None:
+            item.alert = alert
 
         # Add transaction
         self.db_conn.add(item)
