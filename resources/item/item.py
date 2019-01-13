@@ -46,7 +46,7 @@ class ItemResource:
         for item in res:
             items.append({
                 'id': item.item_id,
-                'name': item.name, 'description': item.description, 
+                'name': item.name, 'description': item.description.decode('utf-8'), 
                 'barcode': item.barcode, 'available': item.available,
                 'allocated': item.allocated, 'alert': item.alert,
                 'user_id': item.user_id
@@ -72,7 +72,7 @@ class ItemResource:
 
         # Read warehouse details
         name = req.media.get('name')
-        description = req.media.get('description')
+        description = req.media.get('description').encode('utf-8')
         barcode = req.media.get('barcode')
         available = req.media.get('available')
         allocated = req.media.get('allocated')
@@ -143,7 +143,7 @@ class ItemResource:
             item.name = name
 
         if description != None:
-            item.description = description
+            item.description = description.encode('utf-8')
 
         if barcode != None:
             item.barcode = barcode
