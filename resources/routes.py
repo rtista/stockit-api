@@ -3,7 +3,7 @@ from .auth import AuthResource, AuthTokenResource
 # from .account import AccountResource
 from .user import UserResource
 from .warehouse import WarehouseResource
-from .item import ItemResource
+from .item import ItemResource, UnitsResource
 
 
 # The base point for each route
@@ -27,4 +27,5 @@ ROUTES = {
     # Item Module
     '/warehouse/{warehouse_id:int}/item': ItemResource,
     '/warehouse/{warehouse_id:int}/item/{item_id:int}': ItemResource,
+    '/warehouse/{warehouse_id:int}/item/{item_id:int}/units': UnitsResource,
 }
