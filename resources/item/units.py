@@ -24,8 +24,12 @@ class UnitsResource:
         if 'unit' not in req.params or req.params['unit'] not in ['available', 'allocated']:
             raise falcon.HTTPBadRequest(title='Bad Request', description='Please specify available or allocated units.')
 
+        # Check user warehouse
+        if self.db_conn.query(UserWarehouse).filter_by(user_id=self.user_id, warehouse_id=warehouse_id).first() == None:
+            raise falcon.HTTPNotFound(title='Not Found', description='The requested warehouse does not exist.')
+
         # Get item from user warehouse
-        item = self.db_conn.query(Item).join(UserWarehouse).filter(Item.warehouse_id == UserWarehouse.warehouse_id and UserWarehouse.user_id == self.user_id and UserWarehouse.warehouse_id == warehouse_id and Item.item_id == item_id).first()
+        item = self.db_conn.query(Item).filter_by(item_id=item_id).first()
 
         # If item does not exist
         if item == None:
@@ -51,5 +55,5 @@ class UnitsResource:
             self.db_conn.rollback()
             raise falcon.HTTPInternalServerError('Internal Server Error', 'An error ocurred, please inform the development team.')
 
-        resp.media = {'item': item}
+        resp.media = {'Success': 'Increment successful'}
         resp.status = falcon.HTTP_200
