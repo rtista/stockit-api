@@ -1,6 +1,7 @@
 # Imports
 from models import User, AuthToken
 from config import AppConfig
+from hooks import Authorize
 
 # Batteries
 from time import time
@@ -79,3 +80,30 @@ class AuthTokenResource:
             'expires_on': token.expires_at
         }
         resp.status = falcon.HTTP_201
+
+    @falcon.before(Authorize())
+    def on_delete(self, req, resp):
+        """
+        Handles DELETE requests.
+        
+        Allows deleting user authentication bearer tokens.
+        
+        Args:
+            req ([type]): The request object.
+            resp ([type]): The response object.
+        """
+        # Get token by user id
+        self.db_conn.query(AuthToken).filter_by(user_id=self.user_id).delete()
+
+        # Commit modifications
+        try:
+            self.db_conn.commit()
+
+        except Exception:
+
+            # Rollback Changes
+            self.db_conn.rollback()
+            raise falcon.HTTPInternalServerError('Internal Server Error', 'An error ocurred, please inform the development team.')
+
+        resp.media = {'success': 'User authentication token deleted successfuly'}
+        resp.status = falcon.HTTP_200
