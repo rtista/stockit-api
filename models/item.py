@@ -5,7 +5,7 @@ from . import Base
 from time import time
 
 # Third Party Imports
-from sqlalchemy import Column, ForeignKey, Integer, String, BLOB
+from sqlalchemy import Column, ForeignKey, Integer, String, BLOB, UniqueConstraint
 
 
 class Item(Base):
@@ -17,8 +17,12 @@ class Item(Base):
     warehouse_id =  Column('warehouse_id', Integer, ForeignKey('warehouse.warehouse_id'), nullable=False)
     name = Column('name', String(32), nullable=False)
     description = Column('description', BLOB(8192), nullable=True)
-    barcode = Column('barcode', String(64), index=True, unique=True, nullable=True)
+    barcode = Column('barcode', String(64), index=True, nullable=True)
     available = Column('available', Integer, default=0)
     allocated = Column('allocated', Integer, default=0)
     alert = Column('alert', Integer, default=0)
     created_at = Column('created_at', Integer, default=int(time()))
+
+    __table_args__ = (
+        UniqueConstraint('warehouse_id', 'barcode', name='barcode_warehouse_unique'),
+    )
